@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply text-tWhite;
+  }
+}
+
+@layer components {
+  .input {
+    @apply h-[38px] px-4 rounded-full border-[rgb(51,54,57)] focus:outline-none text-black;
+  }
+}
+
+html {
+  font-size: 14px;
+}
+
+body {
+  background-color: #000000;
+}
