@@ -12,12 +12,11 @@ function LoginForm() {
   const { register, handleSubmit, getValues } = useForm<LoginDto>();
   const { alertMessage } = useContext(AlertContext);
   const onValid = async (data: LoginDto) => {
-    console.log(data);
     try {
       const result = await axios.post("/api/users/create", data);
-      console.log(result);
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
+      errorsAlert(err.response.data.message);
     }
   };
   const errorsAlert = useCallback(
@@ -70,12 +69,12 @@ function LoginForm() {
           </div>
         </div>
         <div className="relative -top-5 flex">
-          <button
+          <div
             onClick={() => router.push("/log-in")}
-            className="bg-tSky text-tWhite font-bold input grow"
+            className="bg-tSky text-tWhite font-bold input grow cursor-pointer flex justify-center items-center"
           >
             로그인하기
-          </button>
+          </div>
         </div>
       </form>
     </div>

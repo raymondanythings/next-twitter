@@ -7,8 +7,8 @@ function Alert() {
   } = useContext(AlertContext);
   return (
     <div
-      className={`bg-tSky absolute bottom-0 w-full ${
-        !open ? "scale-0" : "scale-1"
+      className={`bg-tSky fixed bottom-0 w-full ${
+        !open ? "scale-y-0" : "scale-y-1"
       } origin-bottom duration-300 flex items-center p-6`}
     >
       {text}

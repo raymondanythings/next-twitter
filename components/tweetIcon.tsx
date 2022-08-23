@@ -1,9 +1,17 @@
-function TweetIcon() {
+interface IconProps {
+  size?: "small" | "normal";
+}
+
+function TweetIcon({ size = "normal" }: IconProps) {
   return (
     <svg
       viewBox="0 0 24 24"
       aria-hidden="true"
-      className="pb-[11px] min-h-[53px] h-[3rem] self-start text-[rgb(214,217,219)] max-w-full"
+      className={`${
+        size === "normal"
+          ? "pb-[11px] min-h-[53px] h-[3rem]"
+          : "h-[1.75rem] min-h-[50px] w-[30px]"
+      } self-start text-[rgb(214,217,219)] max-w-full`}
       fill="currentColor"
     >
       <g>

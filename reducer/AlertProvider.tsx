@@ -23,10 +23,23 @@ function AlertProvider({ children }: { children: React.ReactNode }) {
     text: null,
   });
 
+  const [idle, setIdle] = useState(false);
+
   const alertMessage = (text: string) => {
     setState({ open: true, text });
-    setTimeout(() => setState((prev) => ({ ...prev, open: false })), 3000);
+    if (!idle) {
+      setIdle(true);
+      new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(setState((prev) => ({ ...prev, open: false })));
+        }, 3000);
+      }).then(() => {
+        setState((prev) => ({ ...prev, text: null }));
+        setIdle(false);
+      });
+    }
   };
+
   return (
     <AlertContext.Provider value={{ state, alertMessage }}>
       {children}

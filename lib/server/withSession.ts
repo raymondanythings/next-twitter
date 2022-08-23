@@ -1,33 +1,20 @@
-import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
+import { withIronSessionApiRoute } from "iron-session/next";
+import { NextApiHandler } from "next";
 
-// declare module "next" {
-//   interface NextApiRequest {
-//     req: {
-//       session: {
-//         user?: {
-//           id: number;
-//         };
-//       };
-//     };
-//   }
-// }
-
-type Override<T1, T2> = Omit<T1, keyof T2> & T2;
-export type TweetApiRequest = Override<NextApiRequest, { user?: Object }>;
-
-function withSession(next: NextApiHandler) {
-  return async function (req: TweetApiRequest, res: NextApiResponse) {
-    const user = JSON.parse(localStorage.getItem("user") ?? "");
-    if (!user) {
-      return res.status(401).json({ ok: false });
-    }
-    try {
-      req.user = user;
-      await next(req, res);
-    } catch (error) {
-      return res.status(500).json({ ok: false, error });
-    }
-  };
+declare module "iron-session" {
+  interface IronSessionData {
+    user?: {
+      id: number;
+    };
+  }
 }
 
-export default withSession;
+const cookieOptions = {
+  cookieName: "Tweet-session",
+  password: "x/?Eq/PQu^mx^-VY.4q6Un,<qW9YK(,{c28}M4NTk:dZLXJvU9",
+  secure: false,
+};
+
+export function withApiSession(fn: NextApiHandler) {
+  return withIronSessionApiRoute(fn, cookieOptions);
+}

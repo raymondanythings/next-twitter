@@ -1,5 +1,4 @@
 import { NextApiResponse, NextApiRequest } from "next";
-import { TweetApiRequest } from "./withSession";
 
 export interface ResponseType {
   ok?: boolean;
@@ -20,13 +19,13 @@ export default function withHandler<T = any>({
   isPrivate = true,
 }: ConfigType<T>) {
   return async function (
-    req: TweetApiRequest,
+    req: NextApiRequest,
     res: NextApiResponse
   ): Promise<any> {
     if (req.method && !methods.includes(req.method as any)) {
       return res.status(405).end();
     }
-    if (isPrivate && !req.user) {
+    if (isPrivate && !req.session?.user) {
       return res.status(401).json({ ok: false });
     }
     try {
