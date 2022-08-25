@@ -1,11 +1,18 @@
+import useUser from "hook/useUser";
 import React from "react";
 import Footer from "../components/Footer";
 import LoginForm from "../components/LoginForm";
 import TweetIcon from "../components/tweetIcon";
 
 function CreateAccount() {
-  return (
-    <div>
+  const { isLoading, user } = useUser({
+    redirectIfFound: true,
+    redirectTo: "/",
+  });
+  return isLoading ? (
+    <>Loading...</>
+  ) : (
+    <div className="p-[15px]">
       <div className="p-[19px] flex flex-col">
         <TweetIcon />
         <div className="text-tWhite -traking-[0.8px] font-bold leading-[49px] text-[38px] my-9">

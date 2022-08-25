@@ -1,6 +1,7 @@
 import axios from "axios";
 import MuiInput from "components/MuiInput";
 import TweetIcon from "components/tweetIcon";
+import useUser from "hook/useUser";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
@@ -12,6 +13,10 @@ export interface LoginProps {
 
 function Login() {
   const router = useRouter();
+  const { isLoading } = useUser({
+    redirectIfFound: true,
+    redirectTo: "/",
+  });
   const {
     control,
     handleSubmit,
@@ -45,8 +50,10 @@ function Login() {
       console.log(err);
     }
   };
-  return (
-    <div>
+  return isLoading ? (
+    <>Loading...</>
+  ) : (
+    <div className="p-[15px]">
       <div className="flex items-center">
         <Link href="/create-account">
           <a className="basis-1/2">

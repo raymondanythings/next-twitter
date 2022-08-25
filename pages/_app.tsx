@@ -1,3 +1,4 @@
+import useUser from "hook/useUser";
 import Head from "next/head";
 import { SWRConfig } from "swr";
 import Alert from "../components/Alert";
@@ -5,6 +6,7 @@ import "../global.css";
 import AlertProvider from "../reducer/AlertProvider";
 
 export default function App({ Component, pageProps }: any) {
+  const user = useUser();
   return (
     <SWRConfig
       value={{
@@ -19,7 +21,7 @@ export default function App({ Component, pageProps }: any) {
         />
       </Head>
       <AlertProvider>
-        <div className="p-[15px] flex flex-col">
+        <div className="flex flex-col">
           <Component {...pageProps} />
         </div>
         <Alert />

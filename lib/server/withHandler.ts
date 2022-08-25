@@ -22,6 +22,7 @@ export default function withHandler<T = any>({
     req: NextApiRequest,
     res: NextApiResponse
   ): Promise<any> {
+    console.log(req.session);
     if (req.method && !methods.includes(req.method as any)) {
       return res.status(405).end();
     }
