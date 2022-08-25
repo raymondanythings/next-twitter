@@ -1,4 +1,4 @@
-import { Tweet as TweetType, User } from "@prisma/client";
+import { Fav, Tweet as TweetType, User } from "@prisma/client";
 import Tweet from "components/Tweet";
 import HomeLayout from "layout/HomeLayout";
 import Head from "next/head";
@@ -8,13 +8,14 @@ import { Response } from "types/common";
 
 interface Tweets extends TweetType {
   user: User;
+  Fav: Fav[];
 }
 interface GetTweets extends Response {
   result: Tweets[];
 }
 
 function Home() {
-  const { data, error } = useSWR<GetTweets>("/api/tweet/all");
+  const { data, error, mutate } = useSWR<GetTweets>("/api/tweet/all");
   const loading = !data && !error;
   return (
     <HomeLayout path="/">
@@ -26,9 +27,10 @@ function Home() {
       ) : (
         data && (
           <section className="flex flex-col divide-y-2 pb-[50px] divide-borderColor">
-            {data.result.map((item) => (
-              <Tweet tweet={item} key={item.id} />
-            ))}
+            {data.result.map((item) => {
+              const tweet = { ...item, isLike: !!item.Fav.length };
+              return <Tweet mutate={mutate} tweet={tweet} key={item.id} />;
+            })}
           </section>
         )
       )}

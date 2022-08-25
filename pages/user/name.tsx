@@ -100,7 +100,6 @@ function Name() {
                 className={`absolute top-full w-[70vw] backdrop-blur-md bg-transparent z-50  p-4  rounded-md ${
                   isOpen ? "scale-100" : "scale-0"
                 } duration-150 origin-top`}
-                onTransitionEnd={() => console.log("????")}
               >
                 <div className="grid grid-cols-4 gap-3">
                   {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (

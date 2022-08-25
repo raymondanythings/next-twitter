@@ -54,7 +54,7 @@ const HomeLayout = ({ children, path }: LayoutProps) => {
           className="flex mr-6 relative"
           onClick={() => setIsOpen((prev) => !prev)}
         >
-          {user.logo ? (
+          {user.logo !== undefined ? (
             <div className="relative w-[30px] h-[30px] rounded-full">
               <Image
                 src={`/images/${user.logo}.png`}
@@ -85,14 +85,6 @@ const HomeLayout = ({ children, path }: LayoutProps) => {
                   </div>
                 </div>
               ))}
-            </div>
-            <div className="w-full flex justify-center">
-              <div
-                onClick={() => setIsOpen(false)}
-                className="mx-auto outline-tWhite my-[23px] rounded-full py-2 px-[30px] text-center cursor-pointer bg-[rgb(239,243,244)] border-black border text-[rgb(15,20,25)] font-bold leading-[19px] duration-150"
-              >
-                확인
-              </div>
             </div>
           </div>
         </div>

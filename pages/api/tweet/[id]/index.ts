@@ -4,17 +4,26 @@ import db from "lib/server/db";
 import { withApiSession } from "lib/server/withSession";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const result = await db.tweet.findMany({
+  const {
+    query: { id },
+    session: { user },
+  } = req;
+  const tweet = await db.tweet.findUnique({
+    where: { id: +id! },
     include: {
       user: true,
-      Fav: {
-        where: {
-          userId: req.session.user!.id,
-        },
-      },
     },
-    orderBy: { updatedAt: "desc" },
   });
+  const isLike = !!(await db.fav.findFirst({
+    where: {
+      tweetId: tweet?.id,
+      userId: user?.id,
+    },
+    select: {
+      id: true,
+    },
+  }));
+  const result = { ...tweet, isLike };
   return res.status(200).json({ ok: true, result });
 }
 

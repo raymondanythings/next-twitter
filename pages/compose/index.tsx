@@ -50,7 +50,7 @@ const Compose = () => {
       </header>
       <div className="px-[15px] py-[4px] flex">
         <div className="mr-[11px] pt-2">
-          {user?.logo ? (
+          {user?.logo !== undefined ? (
             <div className="w-[46px] h-[46px] rounded-full overflow-hidden relative">
               <Image
                 src={`/images/${user.logo}.png`}
