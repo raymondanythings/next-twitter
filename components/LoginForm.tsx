@@ -1,3 +1,4 @@
+import { User } from "@prisma/client";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useCallback, useContext } from "react";
@@ -13,7 +14,15 @@ function LoginForm() {
   const { alertMessage } = useContext(AlertContext);
   const onValid = async (data: LoginDto) => {
     try {
-      const result = await axios.post("/api/users/create", data);
+      const result = await axios.post<{ ok: boolean; user: User }>(
+        "/api/users/create",
+        data
+      );
+      if (result.data.ok) {
+        await axios.post("/api/users/login", data);
+        router.push("/user/name");
+        return;
+      }
     } catch (err: any) {
       console.log(err);
       errorsAlert(err.response.data.message);

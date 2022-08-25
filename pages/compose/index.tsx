@@ -14,7 +14,6 @@ const Compose = () => {
 
   const onValid = async (data: TextAreaProp) => {
     const res = await axios.post("/api/tweet/compose", data);
-    console.log(res);
   };
 
   const resize = (obj: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -61,7 +60,7 @@ const Compose = () => {
             className="p-[11px] text-inherit min-h-[114px] max-h-[252px] bg-transparent resize-none grow focus:outline-none"
             {...register("content", { required: true })}
           />
-          <div className="w-full h-[50px] border-b-[rgba(163,163,163,0.2)] border-b"></div>
+          <div className="w-full h-[50px] border-b-boderColor border-b"></div>
         </div>
       </div>
     </form>

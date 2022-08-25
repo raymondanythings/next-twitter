@@ -1,8 +1,7 @@
-import { LoginProps } from "pages/log-in";
 import React, { forwardRef, InputHTMLAttributes, useState } from "react";
 import { useController, UseControllerProps } from "react-hook-form";
 
-type CustomInputProps = UseControllerProps<LoginProps> &
+type CustomInputProps = UseControllerProps<any> &
   InputHTMLAttributes<HTMLInputElement>;
 interface InputProps extends CustomInputProps {
   label: string;

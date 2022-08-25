@@ -13,18 +13,23 @@ const HomeLayout = ({ children, path }: LayoutProps) => {
     redirectTo: "/log-in",
   });
   const currentPath = router.pathname;
+  if (!isLoading && user && !user.name) {
+    router.push("/user/name");
+    return <></>;
+  }
   return (
     <div>
-      <header className="h-[50px] px-4 py-[10px] flex border-b-[rgba(163,163,163,0.2)] border-b sticky top-0 w-full backdrop-blur-[12px]">
+      <header className="h-[50px] z-50 px-4 py-[10px] flex border-b-[rgba(163,163,163,0.2)] border-b sticky top-0 w-full backdrop-blur-[12px]">
         <div className="flex mr-6">
           <div className="w-[30px] h-[30px] bg-blue-300 rounded-full" />
         </div>
         <div className="grow items-center flex py-[2px] text-lg font-semibold">
           <h1>Home</h1>
         </div>
+        <button className="items-center flex">Logout</button>
       </header>
       {children}
-      <nav className="fixed bottom-0 h-[3.5rem] border-t-[rgba(163,163,163,0.2)] border-t w-full flex items-center justify-around">
+      <nav className="fixed bg-black bottom-0 h-[3.5rem] border-t-[rgba(163,163,163,0.2)] border-t w-full flex items-center justify-around">
         <Link href="/">
           <div className="">
             {currentPath === path ? (

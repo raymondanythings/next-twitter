@@ -10,6 +10,7 @@ module.exports = {
       colors: {
         tWhite: "rgba(231,233,234)",
         tSky: "rgb(29, 155, 240)",
+        borderColor: "rgba(163,163,163,0.2)",
       },
     },
   },
