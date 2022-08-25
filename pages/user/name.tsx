@@ -2,9 +2,10 @@ import axios from "axios";
 import MuiInput from "components/MuiInput";
 import TweetIcon from "components/tweetIcon";
 import useUser from "hook/useUser";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export interface NameProps {
@@ -12,6 +13,8 @@ export interface NameProps {
 }
 
 function Name() {
+  const [imageNum, setImageNum] = useState<null | number>(null);
+  const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const { isLoading, mutateUser, user } = useUser({
     redirectTo: "/",
@@ -20,8 +23,9 @@ function Name() {
   const { control, handleSubmit, setError } = useForm<NameProps>();
 
   const onValid = async (data: NameProps) => {
+    const form = { ...data, logo: imageNum };
     try {
-      const result = await axios.post("/api/users/update", data);
+      const result = await axios.post("/api/users/update", form);
       if (result.data.ok) {
         mutateUser();
         router.push("/");
@@ -69,10 +73,60 @@ function Name() {
       <form onSubmit={handleSubmit(onValid)}>
         <div className="px-[15px]">
           <div>
-            <div className="my-[19px]">
+            <div className="my-[19px] mx-auto w-fit">
               <h1 className="leading-[30px] text-[25px] font-bold">
-                이름이 무엇인가요?
+                프로필 설정
               </h1>
+            </div>
+            <div className="w-fit mx-auto my-10 relative flex justify-center">
+              {imageNum !== null ? (
+                <div
+                  className="w-[68px] h-[68px] rounded-full relative overflow-hidden"
+                  onClick={() => setIsOpen((prev) => !prev)}
+                >
+                  <Image
+                    src={`/images/${imageNum}.png`}
+                    alt="icon"
+                    layout="fill"
+                  />
+                </div>
+              ) : (
+                <div
+                  className="w-[68px] h-[68px] rounded-full relative bg-tSky"
+                  onClick={() => setIsOpen((prev) => !prev)}
+                />
+              )}
+              <div
+                className={`absolute top-full w-[70vw] backdrop-blur-md bg-transparent z-50  p-4  rounded-md ${
+                  isOpen ? "scale-100" : "scale-0"
+                } duration-150 origin-top`}
+                onTransitionEnd={() => console.log("????")}
+              >
+                <div className="grid grid-cols-4 gap-3">
+                  {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+                    <div key={num} className="flex justify-center grow">
+                      <div
+                        className="relative w-12 h-12 "
+                        onClick={() => setImageNum(num)}
+                      >
+                        <Image
+                          src={`/images/${num}.png`}
+                          alt="icon"
+                          layout="fill"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="w-full flex justify-center">
+                  <div
+                    onClick={() => setIsOpen(false)}
+                    className="mx-auto outline-tWhite my-[23px] rounded-full py-2 px-[30px] text-center cursor-pointer bg-[rgb(239,243,244)] border-black border text-[rgb(15,20,25)] font-bold leading-[19px] duration-150"
+                  >
+                    확인
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="flex flex-col space-y-6">
               <MuiInput

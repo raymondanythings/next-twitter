@@ -5,7 +5,7 @@ import { exclude } from "lib/server/fn";
 import { withApiSession } from "lib/server/withSession";
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const {
-    body: { email, name },
+    body: { email, name, logo },
   } = req;
   const exist = await db.user.findUnique({
     where: { id: req.session.user!.id },
@@ -18,7 +18,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const result = await db.user.update({
     where: { id: req.session.user?.id },
-    data: { email, name },
+    data: { email, name, logo },
   });
 
   const user = exclude(result, "password");

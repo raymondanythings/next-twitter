@@ -1,19 +1,24 @@
 import axios from "axios";
 import useUser from "hook/useUser";
+import Image from "next/image";
 import Link from "next/link";
+import Router from "next/router";
 import React, { KeyboardEvent } from "react";
 import { useForm } from "react-hook-form";
 interface TextAreaProp {
   content: string;
 }
 const Compose = () => {
-  const { isLoading } = useUser({
-    redirectTo: "/log-in",
+  const { user, isLoading } = useUser({
+    redirectTo: "/create-account",
   });
   const { register, handleSubmit } = useForm<TextAreaProp>();
 
   const onValid = async (data: TextAreaProp) => {
     const res = await axios.post("/api/tweet/compose", data);
+    if (res.data.ok) {
+      Router.push("/");
+    }
   };
 
   const resize = (obj: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -45,7 +50,17 @@ const Compose = () => {
       </header>
       <div className="px-[15px] py-[4px] flex">
         <div className="mr-[11px] pt-2">
-          <div className="w-[46px] h-[46px] rounded-full bg-teal-400" />
+          {user?.logo ? (
+            <div className="w-[46px] h-[46px] rounded-full overflow-hidden relative">
+              <Image
+                src={`/images/${user.logo}.png`}
+                alt="logo"
+                layout="fill"
+              />
+            </div>
+          ) : (
+            <div className="w-[46px] h-[46px] rounded-full bg-tSky" />
+          )}
         </div>
         <div className="grow flex flex-col text-[19px]">
           <textarea

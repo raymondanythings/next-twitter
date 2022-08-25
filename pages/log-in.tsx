@@ -13,7 +13,7 @@ export interface LoginProps {
 
 function Login() {
   const router = useRouter();
-  const { isLoading } = useUser({
+  const { isLoading, mutateUser } = useUser({
     redirectIfFound: true,
     redirectTo: "/",
   });
@@ -35,6 +35,7 @@ function Login() {
     try {
       const result = await axios.post("/api/users/login", data);
       if (result.data.ok) {
+        mutateUser({ ok: true, user: result.data.user });
         router.push("/");
         return;
       }

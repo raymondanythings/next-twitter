@@ -1,7 +1,9 @@
-import React, { ReactNode } from "react";
+import React, { MouseEvent, ReactNode, useState } from "react";
 import useUser from "hook/useUser";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import Image from "next/image";
+import axios from "axios";
 interface LayoutProps {
   children: ReactNode;
   path?: string;
@@ -9,24 +11,97 @@ interface LayoutProps {
 
 const HomeLayout = ({ children, path }: LayoutProps) => {
   const router = useRouter();
-  const { user, isLoading } = useUser({
-    redirectTo: "/log-in",
+  const [isOpen, setIsOpen] = useState(false);
+  const { user, isLoading, mutateUser } = useUser({
+    redirectTo: "/create-account",
   });
   const currentPath = router.pathname;
   if (!isLoading && user && !user.name) {
     router.push("/user/name");
     return <></>;
   }
-  return (
+
+  const onLogout = async () => {
+    const res = await axios.post("/api/users/logout");
+    if (res.data.ok) {
+      mutateUser({ ok: true, user: undefined }, { revalidate: false });
+      router.push("/create-account");
+    }
+  };
+
+  const changeImage = async (logo: number) => {
+    await axios.post("/api/users/update", { logo });
+    mutateUser(
+      (prev) => {
+        if (prev?.user) {
+          return {
+            ok: prev.ok,
+            user: {
+              ...prev.user,
+              logo,
+            },
+          };
+        }
+        return prev;
+      },
+      { revalidate: false }
+    );
+  };
+  return user ? (
     <div>
       <header className="h-[50px] z-50 px-4 py-[10px] flex border-b-[rgba(163,163,163,0.2)] border-b sticky top-0 w-full backdrop-blur-[12px]">
-        <div className="flex mr-6">
-          <div className="w-[30px] h-[30px] bg-blue-300 rounded-full" />
+        <div
+          className="flex mr-6 relative"
+          onClick={() => setIsOpen((prev) => !prev)}
+        >
+          {user.logo ? (
+            <div className="relative w-[30px] h-[30px] rounded-full">
+              <Image
+                src={`/images/${user.logo}.png`}
+                alt="logo"
+                layout="fill"
+              />
+            </div>
+          ) : (
+            <div className="relative w-[30px] h-[30px] rounded-full bg-tSky" />
+          )}
+          <div
+            className={`absolute left-full top-full w-[70vw] backdrop-blur-md z-50 p-4  bg-[rgba(0,0,0,0.8)] rounded-md ${
+              isOpen ? "scale-100" : "scale-0"
+            } duration-150 origin-top-left`}
+          >
+            <div className="grid grid-cols-4 gap-3">
+              {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+                <div key={num} className="flex justify-center grow">
+                  <div
+                    className="relative w-12 h-12 "
+                    onClick={() => changeImage(num)}
+                  >
+                    <Image
+                      src={`/images/${num}.png`}
+                      alt="icon"
+                      layout="fill"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="w-full flex justify-center">
+              <div
+                onClick={() => setIsOpen(false)}
+                className="mx-auto outline-tWhite my-[23px] rounded-full py-2 px-[30px] text-center cursor-pointer bg-[rgb(239,243,244)] border-black border text-[rgb(15,20,25)] font-bold leading-[19px] duration-150"
+              >
+                확인
+              </div>
+            </div>
+          </div>
         </div>
         <div className="grow items-center flex py-[2px] text-lg font-semibold">
           <h1>Home</h1>
         </div>
-        <button className="items-center flex">Logout</button>
+        <button onClick={onLogout} className="items-center flex">
+          Logout
+        </button>
       </header>
       {children}
       <nav className="fixed bg-black bottom-0 h-[3.5rem] border-t-[rgba(163,163,163,0.2)] border-t w-full flex items-center justify-around">
@@ -71,7 +146,7 @@ const HomeLayout = ({ children, path }: LayoutProps) => {
         </Link>
       </nav>
     </div>
-  );
+  ) : null;
 };
 
 export default HomeLayout;

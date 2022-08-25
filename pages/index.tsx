@@ -16,7 +16,6 @@ interface GetTweets extends Response {
 function Home() {
   const { data, error } = useSWR<GetTweets>("/api/tweet/all");
   const loading = !data && !error;
-  console.log(data);
   return (
     <HomeLayout path="/">
       <Head>
@@ -27,48 +26,6 @@ function Home() {
       ) : (
         data && (
           <section className="flex flex-col divide-y-2 pb-[50px] divide-borderColor">
-            {data.result.map((item) => (
-              <Tweet tweet={item} key={item.id} />
-            ))}
-            {data.result.map((item) => (
-              <Tweet tweet={item} key={item.id} />
-            ))}
-            {data.result.map((item) => (
-              <Tweet tweet={item} key={item.id} />
-            ))}
-            {data.result.map((item) => (
-              <Tweet tweet={item} key={item.id} />
-            ))}
-            {data.result.map((item) => (
-              <Tweet tweet={item} key={item.id} />
-            ))}
-            {data.result.map((item) => (
-              <Tweet tweet={item} key={item.id} />
-            ))}
-            {data.result.map((item) => (
-              <Tweet tweet={item} key={item.id} />
-            ))}
-            {data.result.map((item) => (
-              <Tweet tweet={item} key={item.id} />
-            ))}
-            {data.result.map((item) => (
-              <Tweet tweet={item} key={item.id} />
-            ))}
-            {data.result.map((item) => (
-              <Tweet tweet={item} key={item.id} />
-            ))}
-            {data.result.map((item) => (
-              <Tweet tweet={item} key={item.id} />
-            ))}
-            {data.result.map((item) => (
-              <Tweet tweet={item} key={item.id} />
-            ))}
-            {data.result.map((item) => (
-              <Tweet tweet={item} key={item.id} />
-            ))}
-            {data.result.map((item) => (
-              <Tweet tweet={item} key={item.id} />
-            ))}
             {data.result.map((item) => (
               <Tweet tweet={item} key={item.id} />
             ))}
